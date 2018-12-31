@@ -7,8 +7,12 @@ const PlayerStyle = styled.main`
   float: left;
   padding: 5px;
 
+  input[type=radio] {
+      margin: 0 3px 0 10px;
+  }
+
   input[type=text] {
-      width: 100px;
+      width: 70px;
       text-align: right;
   }
 `;
@@ -19,12 +23,16 @@ type PlayerProps = {
     ScoreChanged(Score: number): void;
     Selected: boolean;
     PlayerSelected(): void;
+    children: React.ReactNode;
 };
 
 const Player: React.FunctionComponent<PlayerProps> = (props) => (
     <PlayerStyle>
         <div>
-            <input type="radio" checked={props.Selected} onChange={props.PlayerSelected} />
+            <label>
+                {props.children}
+                <input type="radio" checked={props.Selected} onChange={props.PlayerSelected} />
+            </label>
             <input type="text" value={props.Score} onChange={() => props.ScoreChanged(Number(event.target.value))} />
         </div>
     </PlayerStyle>
@@ -39,7 +47,7 @@ type CalulatorProps = {
     id: string;
 };
 
-const initialState = { players: [0, 0, 0], selectedPlayerIndex: 0 };
+const initialState = { players: [0, 16200, 7000], selectedPlayerIndex: 1 };
 type State = Readonly<typeof initialState>;
 
 class Calculator extends React.Component<CalulatorProps, State> {
@@ -55,12 +63,15 @@ class Calculator extends React.Component<CalulatorProps, State> {
         return (
             <div>
                 <h3>Players:</h3>
-                {this.state.players.map((val, i) => <Player Score={this.state.players[i]} ScoreChanged={(score => this.setScore(score, i))} Selected={this.state.selectedPlayerIndex == i} PlayerSelected={(() => this.setState({ selectedPlayerIndex: i }))} key={i} />)}
+                {this.state.players.map((val, i) =>
+                    <Player Score={this.state.players[i]} ScoreChanged={(score => this.setScore(score, i))} Selected={this.state.selectedPlayerIndex == i} PlayerSelected={(() => this.setState({ selectedPlayerIndex: i }))} key={i}>
+                        Contestant {i + 1}:
+                    </Player>)}
                 <ClearStyle><br /></ClearStyle>
-                <h3>Result</h3>
                 <pre>
                     {JSON.stringify(this.state, null, 3)}
                 </pre>
+                <h3>Result</h3>
                 <pre>
                     {JSON.stringify(calculator.jeopardyCalculator(this.state.players, this.state.selectedPlayerIndex), null, 3)}
                 </pre>
