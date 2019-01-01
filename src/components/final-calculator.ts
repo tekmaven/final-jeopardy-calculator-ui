@@ -30,7 +30,8 @@ export enum JeopardyTypeResult {
     WIN_IF_SECOND_PLACE_IS_INCORRECT = "win if second place's jeopardy answer is incorrect",
     WIN_IF_THIRD_PLACE_IS_INCORRECT = "win if third place's jeopardy answer is incorrect",
     WIN_IF_SECOND_AND_THIRD_PLACE_IS_INCORRECT = "win if second and third place's jeopardy answer is incorrect",
-    NO_POSSIBLE_WIN = "no possible win"
+    NO_POSSIBLE_WIN = "no possible win",
+    NOT_CODED_YET = "not coded yet"
 }
 
 export function firstPlace(firstPlace: IPlayerModel, allPlayers: IPlayerModel[]): IJeopardyResult {
@@ -68,9 +69,9 @@ export function secondPlace(currentPlayer: IPlayerModel, allPlayers: IPlayerMode
     return {
         bet: {
             min: 0,
-            max: currentPlayer.score
+            max: 0
         },
-        scenario: [JeopardyTypeResult.AUTOMATIC_WIN],
+        scenario: [JeopardyTypeResult.NOT_CODED_YET],
         model: currentPlayer
     };
 }
@@ -79,9 +80,9 @@ export function thirdPlace(currentPlayer: IPlayerModel, allPlayers: IPlayerModel
     return {
         bet: {
             min: 0,
-            max: currentPlayer.score
+            max: 0
         },
-        scenario: [JeopardyTypeResult.AUTOMATIC_WIN],
+        scenario: [JeopardyTypeResult.NOT_CODED_YET],
         model: currentPlayer
     };
 }

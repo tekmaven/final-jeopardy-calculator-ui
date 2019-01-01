@@ -4,25 +4,49 @@ import * as calculator from './final-calculator';
 
 
 const PlayerStyle = styled.main`
-  float: left;
-  padding: 5px;
+	float: left;
+	padding: 15px;
+  	margin-right: 25px;
+	border: 1px solid black;
 
-  input[type=radio] {
-      margin: 0 3px 0 10px;
-  }
 
-  input[type=text] {
-      width: 70px;
-      text-align: right;
-  }
+	input[type=text] {
+		width: 70px;
+		margin: 0 3px 0 10px;
+		text-align: right;
+	}
 `;
 
+type PlayerResultProps = {
+	PlayerIndex: number;
+	PlayerScores: number[]
+}
+
+const PlayerResult: React.FunctionComponent<PlayerResultProps> = ({PlayerIndex, PlayerScores}) => {
+	const result = calculator.jeopardyCalculator(PlayerScores, PlayerIndex);
+	return (
+		<div>
+			<br /><br />
+			<div>
+				<h4>Senario:</h4>
+				{result.scenario.map((s) => (
+					<div>{s}</div>
+				))}
+			</div>
+			<br />
+			<div>
+				<h4>Bet:</h4>
+				<div>Minimum: {result.bet.min}</div>
+				<div>Maximum: {result.bet.max}</div>
+			</div>
+		</div>
+	)
+}
 
 type PlayerProps = {
     Score: number;
     ScoreChanged(Score: number): void;
-    Selected: boolean;
-    PlayerSelected(): void;
+    Label: string;
     children: React.ReactNode;
 };
 
@@ -30,10 +54,14 @@ const Player: React.FunctionComponent<PlayerProps> = (props) => (
     <PlayerStyle>
         <div>
             <label>
-                {props.children}
-                <input type="radio" checked={props.Selected} onChange={props.PlayerSelected} />
+                {props.Label}
+				<input 
+					type="text" 
+					value={props.Score} 
+					onChange={() => props.ScoreChanged(Number(event.target.value))} 
+				/>
             </label>
-            <input type="text" value={props.Score} onChange={() => props.ScoreChanged(Number(event.target.value))} />
+            {props.children}
         </div>
     </PlayerStyle>
 );
@@ -63,18 +91,15 @@ class Calculator extends React.Component<CalulatorProps, State> {
         return (
             <div>
                 <h3>Players:</h3>
-                {this.state.players.map((val, i) =>
-                    <Player Score={this.state.players[i]} ScoreChanged={(score => this.setScore(score, i))} Selected={this.state.selectedPlayerIndex == i} PlayerSelected={(() => this.setState({ selectedPlayerIndex: i }))} key={i}>
-                        Contestant {i + 1}:
+                {this.state.players.map((_, i) =>
+					<Player 
+						Label={`Contestant ${i + 1}`} 
+						Score={this.state.players[i]} 
+						ScoreChanged={(score => this.setScore(score, i))} 
+						key={i}>
+							<PlayerResult PlayerScores={this.state.players} PlayerIndex={i} />
                     </Player>)}
                 <ClearStyle><br /></ClearStyle>
-                <pre>
-                    {JSON.stringify(this.state, null, 3)}
-                </pre>
-                <h3>Result</h3>
-                <pre>
-                    {JSON.stringify(calculator.jeopardyCalculator(this.state.players, this.state.selectedPlayerIndex), null, 3)}
-                </pre>
             </div>
         );
     }
