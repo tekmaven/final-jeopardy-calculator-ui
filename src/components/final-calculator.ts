@@ -30,7 +30,8 @@ export enum JeopardyTypeResult {
     WIN_IF_SECOND_PLACE_IS_INCORRECT = "win if second place's jeopardy answer is incorrect",
     WIN_IF_THIRD_PLACE_IS_INCORRECT = "win if third place's jeopardy answer is incorrect",
     WIN_IF_SECOND_AND_THIRD_PLACE_IS_INCORRECT = "win if second and third place's jeopardy answer is incorrect",
-    NO_POSSIBLE_WIN = "no possible win",
+    WIN_IF_CORRECT_AND_FIRST_PLACE_IS_INCORRECT = "win if final jeopardy answer is correct and first place's answer is incorrect",
+    NO_POSSIBLE_WIN = "no possible win (unless someone makes a betting mistake!)",
     NOT_CODED_YET = "not coded yet"
 }
 
@@ -65,25 +66,52 @@ export function firstPlace(firstPlace: IPlayerModel, allPlayers: IPlayerModel[])
     };
 }
 
-export function secondPlace(currentPlayer: IPlayerModel, allPlayers: IPlayerModel[]): IJeopardyResult {
+export function secondPlace(secondPlace: IPlayerModel, allPlayers: IPlayerModel[]): IJeopardyResult {
+    const firstPlace: IPlayerModel = allPlayers[0];
+    const thirdPlace: IPlayerModel = allPlayers[2];
+
+
+    let bet: IJeopardyBetResult = { min: 0, max: 0 };
+    let scenario: JeopardyTypeResult[] = [];
+
+    if (secondPlace.maxWin > firstPlace.score) {
+        bet.min = firstPlace.score - secondPlace.score;
+        bet.max = secondPlace.score;
+
+        scenario.push(JeopardyTypeResult.WIN_IF_CORRECT_AND_FIRST_PLACE_IS_INCORRECT);
+    }
+    else {
+        bet.max = secondPlace.score;
+        scenario.push(JeopardyTypeResult.NO_POSSIBLE_WIN);
+    }
     return {
-        bet: {
-            min: 0,
-            max: 0
-        },
-        scenario: [JeopardyTypeResult.NOT_CODED_YET],
-        model: currentPlayer
+        bet,
+        scenario,
+        model: secondPlace
     };
 }
 
-export function thirdPlace(currentPlayer: IPlayerModel, allPlayers: IPlayerModel[]): IJeopardyResult {
+export function thirdPlace(thirdPlace: IPlayerModel, allPlayers: IPlayerModel[]): IJeopardyResult {
+    const firstPlace: IPlayerModel = allPlayers[0];
+
+
+    let bet: IJeopardyBetResult = { min: 0, max: 0 };
+    let scenario: JeopardyTypeResult[] = [];
+
+    if (thirdPlace.maxWin > firstPlace.score) {
+        bet.min = firstPlace.score - thirdPlace.score;
+        bet.max = thirdPlace.score;
+
+        scenario.push(JeopardyTypeResult.WIN_IF_CORRECT_AND_FIRST_PLACE_IS_INCORRECT);
+    }
+    else {
+        bet.max = thirdPlace.score;
+        scenario.push(JeopardyTypeResult.NO_POSSIBLE_WIN);
+    }
     return {
-        bet: {
-            min: 0,
-            max: 0
-        },
-        scenario: [JeopardyTypeResult.NOT_CODED_YET],
-        model: currentPlayer
+        bet,
+        scenario,
+        model: thirdPlace
     };
 }
 

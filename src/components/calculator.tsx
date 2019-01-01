@@ -6,7 +6,8 @@ import * as calculator from './final-calculator';
 const PlayerStyle = styled.main`
 	float: left;
 	padding: 15px;
-  	margin-right: 25px;
+	  margin-right: 25px;
+	  margin-bottom: 25px;
 	border: 1px solid black;
 
 
@@ -24,11 +25,15 @@ type PlayerResultProps = {
 
 const PlayerResult: React.FunctionComponent<PlayerResultProps> = ({PlayerIndex, PlayerScores}) => {
 	const result = calculator.jeopardyCalculator(PlayerScores, PlayerIndex);
+
+	if(result.scenario[0] == calculator.JeopardyTypeResult.NOT_CODED_YET) {
+		return (<div><br/><br/><h4>Scenario</h4>Not coded yet</div>)
+	}
 	return (
 		<div>
 			<br /><br />
 			<div>
-				<h4>Senario:</h4>
+				<h4>Scenario:</h4>
 				{result.scenario.map((s) => (
 					<div>{s}</div>
 				))}
