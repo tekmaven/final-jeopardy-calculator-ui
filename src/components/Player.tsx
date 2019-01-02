@@ -37,7 +37,7 @@ export const Player: React.FunctionComponent<PlayerProps> = (props) => (
                 <input
                     type="text"
                     value={props.Score}
-                    onChange={() => props.ScoreChanged(Number(event.target.value))}
+                    onChange={() => props.ScoreChanged(Number(event!.target!.value))}
                 />
             </label>
             {props.children}
