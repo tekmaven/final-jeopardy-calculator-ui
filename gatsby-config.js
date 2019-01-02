@@ -50,6 +50,14 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    'gatsby-plugin-netlify',
+    'gatsby-plugin-netlify-cache',
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "UA-78954-23"
+      },
+    },
     // {
     //   resolve: `gatsby-plugin-manifest`,
     //   options: {
