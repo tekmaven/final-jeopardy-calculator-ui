@@ -24,7 +24,7 @@ export function JeopardyCalculator(scores: number[], playerIndex: number): IJeop
         createPlayer(1),
         createPlayer(2)
     ];
-    console.log(players);
+
     const currentPlayer: IPlayerModel = players[playerIndex];
     players.sort((a, b) => {
         if (a.score > b.score) {
