@@ -4,7 +4,11 @@ import * as calculator from './final-calculator';
 
 
 const PlayerStyle = styled.main`
-	float: left;
+
+@media all and (min-width: 825px) { 
+    float: left;
+    width: 30%;
+}
 	padding: 15px;
 	  margin-right: 25px;
 	  margin-bottom: 25px;
@@ -19,33 +23,33 @@ const PlayerStyle = styled.main`
 `;
 
 type PlayerResultProps = {
-	PlayerIndex: number;
-	PlayerScores: number[]
+    PlayerIndex: number;
+    PlayerScores: number[]
 }
 
-const PlayerResult: React.FunctionComponent<PlayerResultProps> = ({PlayerIndex, PlayerScores}) => {
-	const result = calculator.jeopardyCalculator(PlayerScores, PlayerIndex);
+const PlayerResult: React.FunctionComponent<PlayerResultProps> = ({ PlayerIndex, PlayerScores }) => {
+    const result = calculator.jeopardyCalculator(PlayerScores, PlayerIndex);
 
-	if(result.scenario[0] == calculator.JeopardyTypeResult.NOT_CODED_YET) {
-		return (<div><br/><br/><h4>Scenario</h4>Not coded yet</div>)
-	}
-	return (
-		<div>
-			<br /><br />
-			<div>
-				<h4>Scenario:</h4>
-				{result.scenario.map((s) => (
-					<div>{s}</div>
-				))}
-			</div>
-			<br />
-			<div>
-				<h4>Bet:</h4>
-				<div>Minimum: {result.bet.min}</div>
-				<div>Maximum: {result.bet.max}</div>
-			</div>
-		</div>
-	)
+    if (result.scenario[0] == calculator.JeopardyTypeResult.NOT_CODED_YET) {
+        return (<div><br /><br /><h4>Scenario</h4>Not coded yet</div>)
+    }
+    return (
+        <div>
+            <br /><br />
+            <div>
+                <h4>Scenario:</h4>
+                {result.scenario.map((s) => (
+                    <div>{s}</div>
+                ))}
+            </div>
+            <br />
+            <div>
+                <h4>Bet:</h4>
+                <div>Minimum: {result.bet.min}</div>
+                <div>Maximum: {result.bet.max}</div>
+            </div>
+        </div>
+    )
 }
 
 type PlayerProps = {
@@ -60,11 +64,11 @@ const Player: React.FunctionComponent<PlayerProps> = (props) => (
         <div>
             <label>
                 {props.Label}
-				<input 
-					type="text" 
-					value={props.Score} 
-					onChange={() => props.ScoreChanged(Number(event.target.value))} 
-				/>
+                <input
+                    type="text"
+                    value={props.Score}
+                    onChange={() => props.ScoreChanged(Number(event.target.value))}
+                />
             </label>
             {props.children}
         </div>
@@ -97,12 +101,12 @@ class Calculator extends React.Component<CalulatorProps, State> {
             <div>
                 <h3>Players:</h3>
                 {this.state.players.map((_, i) =>
-					<Player 
-						Label={`Contestant ${i + 1}`} 
-						Score={this.state.players[i]} 
-						ScoreChanged={(score => this.setScore(score, i))} 
-						key={i}>
-							<PlayerResult PlayerScores={this.state.players} PlayerIndex={i} />
+                    <Player
+                        Label={`Contestant ${i + 1}`}
+                        Score={this.state.players[i]}
+                        ScoreChanged={(score => this.setScore(score, i))}
+                        key={i}>
+                        <PlayerResult PlayerScores={this.state.players} PlayerIndex={i} />
                     </Player>)}
                 <ClearStyle><br /></ClearStyle>
             </div>
