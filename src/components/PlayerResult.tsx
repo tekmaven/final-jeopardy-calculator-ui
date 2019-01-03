@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { JeopardyCalculator, JeopardyTypeResult } from '../final-calculator';
+import { JeopardyCalculator, JeopardyTypeResult } from 'final-jeopardy-calculator';
 
 export type PlayerResultProps = {
     PlayerIndex: number;
